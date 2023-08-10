@@ -3,6 +3,7 @@ import Papa from 'papaparse';
 import { DB } from 'src/entities/dataBase';
 import { v4 as uuid } from 'uuid';
 
+import { initMappingState, MANDATORY_FIELD } from './constants';
 import { Header, Transaction } from './types';
 
 export class Preview extends DB {
@@ -29,6 +30,8 @@ export class Preview extends DB {
 
   headers = [] as Header[];
 
+  mapping: Record<MANDATORY_FIELD, string> = initMappingState;
+
   name = '';
 
   public reset = () => {
@@ -39,9 +42,14 @@ export class Preview extends DB {
 
   rows = [] as Transaction[];
 
+  public setMapping = (name: string, value: string) => {
+    this.mapping = { ...this.mapping, [name]: value };
+  };
+
   constructor() {
     super('');
     makeObservable(this, {
+      mapping: observable,
       name: observable,
     });
   }

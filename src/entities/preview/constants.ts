@@ -1,5 +1,4 @@
 /* eslint-disable perfectionist/sort-enums */
-export const mandatoryFields = ['date', 'payee', 'memo', 'amount', 'inflow', 'outflow'];
 
 export enum MANDATORY_FIELD {
   DATE = 'date',
@@ -9,3 +8,8 @@ export enum MANDATORY_FIELD {
   OUTFLOW = 'outflow',
   AMOUNT = 'amount',
 }
+
+export const initMappingState = Object.values(MANDATORY_FIELD).reduce(
+  (acc, field) => ({ ...acc, [field]: '' }),
+  {} as Record<MANDATORY_FIELD, string>
+);
