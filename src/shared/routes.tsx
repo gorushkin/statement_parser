@@ -1,6 +1,5 @@
 import { Navigate, RouteObject } from 'react-router-dom';
-import { StatementPreviewPage } from 'src/pages/StatementPreviewPage';
-import { StatementsPage } from 'src/pages/StatementsPage';
+import { PreviewPage } from 'src/pages/PreviewPage';
 import { UploadFilePage } from 'src/pages/UploadFilePage';
 
 export enum ROUTE {
@@ -8,7 +7,6 @@ export enum ROUTE {
   ROOT = '/',
   STATEMENT = '/statement',
   STATEMENT_PREVIEW = '/statement_preview',
-  STATEMENTS = '/statements',
   UPLOAD_FILE = '/upload',
 }
 
@@ -21,8 +19,6 @@ type RouteType = RouteObject & {
 export const routes: RouteType[] = [
   { element: <UploadFilePage />, isNav: true, name: 'Upload File', path: ROUTE.UPLOAD_FILE },
   { element: <UploadFilePage />, isNav: false, name: 'Upload File', path: ROUTE.ROOT },
-  { element: <StatementPreviewPage />, isNav: false, name: 'Statements', path: `${ROUTE.STATEMENTS}/:statementId` },
-  { element: <StatementPreviewPage />, isNav: true, name: 'Preview Statement', path: ROUTE.STATEMENT_PREVIEW },
-  { element: <StatementsPage />, isNav: true, name: 'Statements', path: ROUTE.STATEMENTS },
+  { element: <PreviewPage />, isNav: true, name: 'Preview Statement', path: ROUTE.STATEMENT_PREVIEW },
   { element: <Navigate replace to="/" />, isNav: false, name: 'Upload File', path: ROUTE.ALL },
 ];

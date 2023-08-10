@@ -2,7 +2,7 @@ import { Box, Text } from '@chakra-ui/react';
 import { observer } from 'mobx-react';
 import { ChangeEvent, FC, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { statement } from 'src/entities/statement';
+import { preview } from 'src/entities/preview';
 import { ROUTE } from 'src/shared/routes';
 import { cn } from 'src/shared/utils';
 
@@ -20,7 +20,7 @@ const FileForm: FC = observer(() => {
 
       reader.addEventListener('load', () => {
         if (!reader.result) return;
-        statement.convert(reader.result, name);
+        preview.convert(reader.result, name);
         navigate(ROUTE.STATEMENT_PREVIEW);
       });
       // TODO: add encoding selector
