@@ -2,7 +2,7 @@ import { Tbody } from '@chakra-ui/react';
 import { observer } from 'mobx-react';
 import { useState } from 'react';
 import { statement } from 'src/entities/statement';
-import { ITable } from 'src/shared/Table';
+import { ITable } from 'src/shared/ui/Table';
 
 import { MANDATORY_FIELD } from '../constants';
 import { StatementPreviewHeader } from './StatementPreviewHeader';

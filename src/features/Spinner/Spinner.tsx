@@ -1,7 +1,7 @@
 import { Spinner as ChackraSpinner } from '@chakra-ui/react';
 import { FC } from 'react';
 
-import { cn } from '../utils';
+import { cn } from '../../shared/utils';
 import styles from './Spinner.module.scss';
 
 interface SpinnerProps {
