@@ -9,7 +9,9 @@ export enum MANDATORY_FIELD {
   AMOUNT = 'amount',
 }
 
-export const initMappingState = Object.values(MANDATORY_FIELD).reduce(
+export const outputTransaction = Object.values(MANDATORY_FIELD).reduce(
   (acc, field) => ({ ...acc, [field]: '' }),
   {} as Record<MANDATORY_FIELD, string>
 );
+
+export const columns = Object.values(MANDATORY_FIELD);

@@ -1,1 +1,1 @@
-export { PreviewTable as StatementPreviewTable } from './ui';
+export { PreviewTable } from './ui';

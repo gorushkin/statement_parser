@@ -1,56 +1,62 @@
-import { makeObservable, observable } from 'mobx';
+import { makeAutoObservable, toJS } from 'mobx';
 import Papa from 'papaparse';
-import { DB } from 'src/entities/dataBase';
-import { v4 as uuid } from 'uuid';
 
-import { initMappingState, MANDATORY_FIELD } from './constants';
+import { columns, MANDATORY_FIELD, outputTransaction } from './constants';
 import { Header, Transaction } from './types';
 
-export class Preview extends DB {
-  private getBody = (data: string) => {
+export class Preview {
+  name = '';
+  headers = [] as Header[];
+  outputTransactions = [] as Record<MANDATORY_FIELD, string>[];
+  inputTransactions = [] as Transaction[];
+  columns = columns;
+
+  constructor() {
+    makeAutoObservable(this);
+  }
+
+  private setInputTransactions = (data: string) => {
     const result = Papa.parse<Transaction>(data, {
       header: true,
       transformHeader: (header) => header.toLowerCase(),
     });
 
-    return result.data;
+    this.inputTransactions = result.data;
   };
 
-  private getHeaders = (data: string) => {
+  private setHeaders = (data: string) => {
     const result = Papa.parse<Header[]>(data, { preview: 1 });
-    return result.data[0].map((item) => item.toLowerCase());
+    this.headers = result.data[0].map((item) => item.toLowerCase());
+  };
+
+  private setOutputTransactions = () => {
+    this.outputTransactions = new Array<Record<MANDATORY_FIELD, string>>(
+      this.inputTransactions.length
+    ).fill(outputTransaction);
   };
 
   public convert = (data: ArrayBuffer | string, name: string) => {
     this.name = name;
-    this.key = uuid();
-    this.headers = this.getHeaders(data.toString());
-    this.rows = this.getBody(data.toString());
+    this.setHeaders(data.toString());
+    this.setInputTransactions(data.toString());
+    this.setOutputTransactions();
   };
-
-  headers = [] as Header[];
-
-  mapping: Record<MANDATORY_FIELD, string> = initMappingState;
-
-  name = '';
 
   public reset = () => {
     this.name = '';
     this.headers = [];
-    this.rows = [];
+    this.inputTransactions = [];
+    this.outputTransactions = [];
   };
 
-  rows = [] as Transaction[];
-
-  public setMapping = (name: string, value: string) => {
-    this.mapping = { ...this.mapping, [name]: value };
+  public saveStatement = () => {
+    console.log(toJS(this.outputTransactions));
   };
 
-  constructor() {
-    super('');
-    makeObservable(this, {
-      mapping: observable,
-      name: observable,
+  public updatePreview = (key: string, rowKey: string) => {
+    this.outputTransactions = this.outputTransactions.map((item, i) => {
+      const rowValue = this.inputTransactions[i][rowKey];
+      return { ...item, [key]: rowValue };
     });
-  }
+  };
 }

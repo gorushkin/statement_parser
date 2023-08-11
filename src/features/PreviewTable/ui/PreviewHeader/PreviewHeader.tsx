@@ -5,21 +5,28 @@ import { MANDATORY_FIELD } from '../../../../entities/preview/constants';
 import { PreviewHeaderCell } from '../PreviewHeaderCell';
 
 interface PreviewHeaderProps {
+  columns: MANDATORY_FIELD[];
   headers: string[];
-  mapping: Record<MANDATORY_FIELD, string>;
   onChange: (name: string, value: string) => void;
 }
 
-const PreviewHeader: FC<PreviewHeaderProps> = ({ headers, mapping, onChange }) => {
-  return (
-    <Thead>
-      <Tr>
-        {Object.keys(mapping).map((item, i) => (
-          <PreviewHeaderCell headers={headers} key={i} name={item as MANDATORY_FIELD} onChange={onChange} />
-        ))}
-      </Tr>
-    </Thead>
-  );
-};
+const PreviewHeader: FC<PreviewHeaderProps> = ({
+  columns,
+  headers,
+  onChange,
+}) => (
+  <Thead>
+    <Tr>
+      {columns.map((item, i) => (
+        <PreviewHeaderCell
+          headers={headers}
+          key={i}
+          name={item}
+          onChange={onChange}
+        />
+      ))}
+    </Tr>
+  </Thead>
+);
 
 export { PreviewHeader };
