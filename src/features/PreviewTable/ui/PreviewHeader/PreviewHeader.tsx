@@ -1,11 +1,11 @@
 import { Thead, Tr } from '@chakra-ui/react';
 import { FC } from 'react';
+import { COLUMN } from 'src/entities/preview/';
 
-import { MANDATORY_FIELD } from '../../../../entities/preview/constants';
 import { PreviewHeaderCell } from '../PreviewHeaderCell';
 
 interface PreviewHeaderProps {
-  columns: MANDATORY_FIELD[];
+  columns: COLUMN[];
   headers: string[];
   onChange: (name: string, value: string) => void;
 }

@@ -1,11 +1,10 @@
 import { Box, Select, Th } from '@chakra-ui/react';
 import { FC } from 'react';
-
-import { MANDATORY_FIELD } from '../../../../entities/preview/constants';
+import { COLUMN } from 'src/entities/preview';
 
 interface PreviewHeaderCellProps {
   headers: string[];
-  name: MANDATORY_FIELD;
+  name: COLUMN;
   onChange: (name: string, value: string) => void;
 }
 

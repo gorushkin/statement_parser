@@ -1,4 +1,5 @@
-export type Column = { [x: string]: string };
+import { COLUMN } from './constants';
+
 export type Header = string;
-export type Transaction = { [x: string]: string };
-export type Result = { [x: string]: string };
+export type InputRecord = { [x: string]: string };
+export type Transaction = Record<COLUMN, string>;

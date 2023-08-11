@@ -20,7 +20,7 @@ const FileForm: FC = observer(() => {
 
       reader.addEventListener('load', () => {
         if (!reader.result) return;
-        preview.convert(reader.result, name);
+        preview.createPreview(reader.result, name);
         navigate(ROUTE.STATEMENT_PREVIEW);
       });
       // TODO: add encoding selector

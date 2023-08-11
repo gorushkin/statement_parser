@@ -1,6 +1,6 @@
 /* eslint-disable perfectionist/sort-enums */
 
-export enum MANDATORY_FIELD {
+export enum COLUMN {
   DATE = 'date',
   PAYEE = 'payee',
   MEMO = 'memo',
@@ -9,9 +9,9 @@ export enum MANDATORY_FIELD {
   AMOUNT = 'amount',
 }
 
-export const outputTransaction = Object.values(MANDATORY_FIELD).reduce(
+export const transaction = Object.values(COLUMN).reduce(
   (acc, field) => ({ ...acc, [field]: '' }),
-  {} as Record<MANDATORY_FIELD, string>
+  {} as Record<COLUMN, string>
 );
 
-export const columns = Object.values(MANDATORY_FIELD);
+export const columns = Object.values(COLUMN);

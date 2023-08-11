@@ -9,7 +9,7 @@ import { PreviewTable } from 'src/features/PreviewTable';
 import { ROUTE } from 'src/shared/routes';
 
 const Preview = observer(() => {
-  const { name, reset, saveStatement } = preview;
+  const { name, resetPreview, saveStatement } = preview;
   const navigate = useNavigate();
 
   useLayoutEffect(() => {
@@ -19,7 +19,7 @@ const Preview = observer(() => {
   return (
     <>
       <Box mb={'1rem'}>
-        <PageHeader name={name} onReset={reset} />
+        <PageHeader name={name} onReset={resetPreview} />
       </Box>
       <Box mb={'1rem'}>
         <PreviewTable />
