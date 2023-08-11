@@ -8,7 +8,7 @@ export class Preview {
   name = '';
   headers = [] as Header[];
   transactions = [] as Transaction[];
-  private inputRecords = [] as InputRecord[];
+  inputRecords = [] as InputRecord[];
   columns = columns;
 
   constructor() {
@@ -16,12 +16,15 @@ export class Preview {
   }
 
   private setInputTransactions = (data: string) => {
+    const isRowEmpty = (row: InputRecord) =>
+      !!Object.values(row).reduce((acc, item) => acc + item, '');
+
     const result = Papa.parse<InputRecord>(data, {
       header: true,
       transformHeader: (header) => header.toLowerCase(),
     });
 
-    this.inputRecords = result.data;
+    this.inputRecords = result.data.filter(isRowEmpty);
   };
 
   private setHeaders = (data: string) => {
@@ -46,6 +49,7 @@ export class Preview {
     this.name = '';
     this.headers = [];
     this.inputRecords = [];
+    this.transactions = [];
     this.transactions = [];
   };
 

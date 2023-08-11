@@ -17,8 +17,28 @@ type RouteType = RouteObject & {
 };
 
 export const routes: RouteType[] = [
-  { element: <UploadFilePage />, isNav: true, name: 'Upload File', path: ROUTE.UPLOAD_FILE },
-  { element: <UploadFilePage />, isNav: false, name: 'Upload File', path: ROUTE.ROOT },
-  { element: <PreviewPage />, isNav: true, name: 'Preview Statement', path: ROUTE.STATEMENT_PREVIEW },
-  { element: <Navigate replace to="/" />, isNav: false, name: 'Upload File', path: ROUTE.ALL },
+  {
+    element: <UploadFilePage />,
+    isNav: true,
+    name: 'Upload File',
+    path: ROUTE.UPLOAD_FILE,
+  },
+  {
+    element: <UploadFilePage />,
+    isNav: false,
+    name: 'Upload File',
+    path: ROUTE.ROOT,
+  },
+  {
+    element: <PreviewPage />,
+    isNav: true,
+    name: 'Preview Statement',
+    path: ROUTE.STATEMENT_PREVIEW,
+  },
+  {
+    element: <Navigate replace to="/" />,
+    isNav: false,
+    name: 'Upload File',
+    path: ROUTE.ALL,
+  },
 ];

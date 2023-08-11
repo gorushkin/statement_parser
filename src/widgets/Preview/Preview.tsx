@@ -1,30 +1,28 @@
 import { Box } from '@chakra-ui/react';
 import { observer } from 'mobx-react';
-import { useLayoutEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Navigate,  } from 'react-router-dom';
 import { preview } from 'src/entities/preview';
+import { InputStatement } from 'src/features/InputStatement';
 import { PageHeader } from 'src/features/PageHeader';
-import { PreviewSaveButton } from 'src/features/PreviewSaveButton';
 import { PreviewTable } from 'src/features/PreviewTable';
 import { ROUTE } from 'src/shared/routes';
 
 const Preview = observer(() => {
   const { name, resetPreview, saveStatement } = preview;
-  const navigate = useNavigate();
 
-  useLayoutEffect(() => {
-    if (!name) navigate(ROUTE.ALL);
-  }, [name, navigate]);
+  if (!name) return <Navigate replace to={ROUTE.ROOT} />;
 
   return (
     <>
       <Box mb={'1rem'}>
-        <PageHeader name={name} onReset={resetPreview} />
+        <PageHeader name={name} onReset={resetPreview} onSave={saveStatement} />
       </Box>
       <Box mb={'1rem'}>
         <PreviewTable />
       </Box>
-      <PreviewSaveButton onSave={saveStatement} />
+      <Box>
+        <InputStatement />
+      </Box>
     </>
   );
 });

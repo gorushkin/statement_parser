@@ -1,8 +1,17 @@
 .table {
   border: 1px solid #ddd !important;
 
-  td {
+  td,
+  th {
     white-space: normal;
     padding: 10px;
+  }
+
+  tr {
+    &:last-of-type {
+      td {
+        border-bottom: none !important;
+      }
+    }
   }
 }
