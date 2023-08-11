@@ -10,20 +10,22 @@ export class Preview {
   transactions = [] as Transaction[];
   inputRecords = [] as InputRecord[];
   columns = columns;
-  columnFormat: ColumnFormat = ColumnFormat.INOUT;
+  currentColumnFormat: ColumnFormat = ColumnFormat.INOUT;
+  nextColumnFormat: ColumnFormat = ColumnFormat.AMOUNT;
 
   constructor() {
     makeAutoObservable(this);
   }
 
-  public switchFormat(format: ColumnFormat) {
+  public toggleColumnsFormat = () => {
     const switchFormatMap = {
       [ColumnFormat.AMOUNT]: ColumnFormat.INOUT,
       [ColumnFormat.INOUT]: ColumnFormat.AMOUNT,
     };
 
-    this.columnFormat = switchFormatMap[format];
-  }
+    this.currentColumnFormat = switchFormatMap[this.currentColumnFormat];
+    this.nextColumnFormat = switchFormatMap[this.currentColumnFormat];
+  };
 
   private setInputTransactions = (data: string) => {
     const isRowEmpty = (row: InputRecord) =>
