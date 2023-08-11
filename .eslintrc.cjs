@@ -20,6 +20,7 @@ module.exports = {
   },
   plugins: ['react-refresh'],
   rules: {
+    'perfectionist/sort-classes': ['off'],
     'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
     '@typescript-eslint/no-non-null-assertion': 'off',
     'no-console': 'warn',
