@@ -9,6 +9,11 @@ export enum COLUMN {
   AMOUNT = 'amount',
 }
 
+export enum ColumnFormat {
+  AMOUNT = 'Amount',
+  INOUT = 'Inflow/Outflow',
+}
+
 export const transaction = Object.values(COLUMN).reduce(
   (acc, field) => ({ ...acc, [field]: '' }),
   {} as Record<COLUMN, string>

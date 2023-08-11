@@ -1,7 +1,7 @@
 import { makeAutoObservable, toJS } from 'mobx';
 import Papa from 'papaparse';
 
-import { COLUMN, columns, transaction } from './constants';
+import { COLUMN, ColumnFormat, columns, transaction } from './constants';
 import { Header, InputRecord, Transaction } from './types';
 
 export class Preview {
@@ -10,9 +10,19 @@ export class Preview {
   transactions = [] as Transaction[];
   inputRecords = [] as InputRecord[];
   columns = columns;
+  columnFormat: ColumnFormat = ColumnFormat.INOUT;
 
   constructor() {
     makeAutoObservable(this);
+  }
+
+  public switchFormat(format: ColumnFormat) {
+    const switchFormatMap = {
+      [ColumnFormat.AMOUNT]: ColumnFormat.INOUT,
+      [ColumnFormat.INOUT]: ColumnFormat.AMOUNT,
+    };
+
+    this.columnFormat = switchFormatMap[format];
   }
 
   private setInputTransactions = (data: string) => {

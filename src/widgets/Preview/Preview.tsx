@@ -1,10 +1,9 @@
 import { Box } from '@chakra-ui/react';
 import { observer } from 'mobx-react';
 import { Navigate,  } from 'react-router-dom';
-import { preview } from 'src/entities/preview';
+import { preview, PreviewTable } from 'src/entities/preview';
 import { InputStatement } from 'src/features/InputStatement';
 import { PageHeader } from 'src/features/PageHeader';
-import { PreviewTable } from 'src/features/PreviewTable';
 import { ROUTE } from 'src/shared/routes';
 
 const Preview = observer(() => {
