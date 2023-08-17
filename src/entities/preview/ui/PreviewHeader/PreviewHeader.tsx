@@ -1,11 +1,11 @@
 import { Thead, Tr } from '@chakra-ui/react';
 import { FC } from 'react';
-import { COLUMN } from 'src/entities/preview/';
+import { Column } from 'src/entities/preview/';
 
 import { PreviewHeaderCell } from '../PreviewHeaderCell';
 
 interface PreviewHeaderProps {
-  columns: COLUMN[];
+  columns: Column[];
   headers: string[];
   onChange: (name: string, value: string) => void;
 }
@@ -17,16 +17,16 @@ const PreviewHeader: FC<PreviewHeaderProps> = ({
 }) => (
   <Thead>
     <Tr>
-      {columns.map((item, i) => (
+      {columns.map(({ name, visible }) => (
         <PreviewHeaderCell
           headers={headers}
-          key={i}
-          name={item}
+          key={name}
+          name={name}
           onChange={onChange}
+          visible={visible}
         />
       ))}
     </Tr>
   </Thead>
 );
-
 export { PreviewHeader };

@@ -1,16 +1,25 @@
 import { makeAutoObservable, toJS } from 'mobx';
 import Papa from 'papaparse';
 
-import { COLUMN, ColumnFormat, columns, transaction } from './constants';
+import { COLUMN, ColumnFormat, columns, transaction } from '../constants';
 import { Header, InputRecord, Transaction } from './types';
+
+const conditionMapping: Record<ColumnFormat, (column: COLUMN) => boolean> = {
+  [ColumnFormat.AMOUNT]: (column) =>
+    column !== COLUMN.OUTFLOW && column !== COLUMN.INFLOW,
+  [ColumnFormat.INOUT]: (column) => column !== COLUMN.AMOUNT,
+};
 
 export class Preview {
   name = '';
   headers = [] as Header[];
   transactions = [] as Transaction[];
   inputRecords = [] as InputRecord[];
-  columns = columns;
   currentColumnFormat: ColumnFormat = ColumnFormat.INOUT;
+  columns = columns.map((column) => ({
+    name: column,
+    visible: conditionMapping[ColumnFormat.INOUT](column),
+  }));
   nextColumnFormat: ColumnFormat = ColumnFormat.AMOUNT;
 
   constructor() {
@@ -25,6 +34,10 @@ export class Preview {
 
     this.currentColumnFormat = switchFormatMap[this.currentColumnFormat];
     this.nextColumnFormat = switchFormatMap[this.currentColumnFormat];
+    this.columns = this.columns.map(({ name }) => ({
+      name,
+      visible: conditionMapping[this.currentColumnFormat](name),
+    }));
   };
 
   private setInputTransactions = (data: string) => {
