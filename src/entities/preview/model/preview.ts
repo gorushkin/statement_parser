@@ -59,7 +59,7 @@ export class Preview {
 
   private setTransactions = () => {
     this.transactions = new Array<Record<COLUMN, string>>(
-      this.inputRecords.length
+      Math.min(5, this.inputRecords.length)
     ).fill(transaction);
   };
 

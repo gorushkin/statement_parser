@@ -1,4 +1,4 @@
-import { Box, Tbody } from '@chakra-ui/react';
+import { Box, Heading, Tbody } from '@chakra-ui/react';
 import { observer } from 'mobx-react';
 import { preview } from 'src/entities/preview';
 import { ITable } from 'src/shared/ui/Table';
@@ -19,11 +19,16 @@ const PreviewTable = observer(() => {
 
   return (
     <Box>
-      <Box display={'flex'} justifyContent={'flex-end'} mb={'1rem'}>
-        <SwitchFormatButton
-          nextColumnFormat={nextColumnFormat}
-          onToggleFormat={toggleColumnsFormat}
-        />
+      <Box display={'flex'} justifyContent={'space-between'} mb={'1rem'}>
+        <Heading as="h1" mb={'1rem'} size="lg">
+          Preview Statement
+        </Heading>
+        <Box>
+          <SwitchFormatButton
+            nextColumnFormat={nextColumnFormat}
+            onToggleFormat={toggleColumnsFormat}
+          />
+        </Box>
       </Box>
       <ITable>
         <PreviewHeader
