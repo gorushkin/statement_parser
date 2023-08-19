@@ -2,15 +2,22 @@ import { makeAutoObservable, toJS } from 'mobx';
 import Papa from 'papaparse';
 
 import { COLUMN, ColumnFormat, columns, transaction } from '../constants';
-import { Header, InputRecord, Transaction } from './types';
-
-const conditionMapping: Record<ColumnFormat, (column: COLUMN) => boolean> = {
-  [ColumnFormat.AMOUNT]: (column) =>
-    column !== COLUMN.OUTFLOW && column !== COLUMN.INFLOW,
-  [ColumnFormat.INOUT]: (column) => column !== COLUMN.AMOUNT,
-};
+import {
+  ConvertDirection,
+  Currencies,
+  Currency,
+  Header,
+  InputRecord,
+  Transaction,
+} from './types';
 
 export class Preview {
+  conditionMapping: Record<ColumnFormat, (column: COLUMN) => boolean> = {
+    [ColumnFormat.AMOUNT]: (column) =>
+      column !== COLUMN.OUTFLOW && column !== COLUMN.INFLOW,
+    [ColumnFormat.INOUT]: (column) => column !== COLUMN.AMOUNT,
+  };
+
   name = '';
   headers = [] as Header[];
   transactions = [] as Transaction[];
@@ -18,13 +25,32 @@ export class Preview {
   currentColumnFormat: ColumnFormat = ColumnFormat.INOUT;
   columns = columns.map((column) => ({
     name: column,
-    visible: conditionMapping[ColumnFormat.INOUT](column),
+    visible: this.conditionMapping[ColumnFormat.INOUT](column),
   }));
   nextColumnFormat: ColumnFormat = ColumnFormat.AMOUNT;
+  currencies: Currencies = {
+    fromCurrency: Currency.NZD,
+    toCurrency: Currency.RUB,
+  };
+  isConvertingEnabled = false;
 
   constructor() {
     makeAutoObservable(this);
   }
+
+  public setCurrencies = ({
+    name,
+    value,
+  }: {
+    name: ConvertDirection;
+    value: Currency;
+  }) => {
+    this.currencies = { ...this.currencies, [name]: value };
+  };
+
+  public toggleConverting = () => {
+    this.isConvertingEnabled = !this.isConvertingEnabled;
+  };
 
   public toggleColumnsFormat = () => {
     const switchFormatMap = {
@@ -36,7 +62,7 @@ export class Preview {
     this.nextColumnFormat = switchFormatMap[this.currentColumnFormat];
     this.columns = this.columns.map(({ name }) => ({
       name,
-      visible: conditionMapping[this.currentColumnFormat](name),
+      visible: this.conditionMapping[this.currentColumnFormat](name),
     }));
   };
 

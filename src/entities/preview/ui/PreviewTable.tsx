@@ -3,6 +3,7 @@ import { observer } from 'mobx-react';
 import { preview } from 'src/entities/preview';
 import { ITable } from 'src/shared/ui/Table';
 
+import { ConvertButtons } from './ConvertButtons';
 import { PreviewHeader } from './PreviewHeader';
 import { PreviewRow } from './PreviewRow';
 import { SwitchFormatButton } from './SwitchFormatButton';
@@ -23,7 +24,13 @@ const PreviewTable = observer(() => {
         <Heading as="h1" mb={'1rem'} size="lg">
           Preview Statement
         </Heading>
-        <Box>
+        <Box
+          alignItems={'center'}
+          display={'flex'}
+          gap={'1rem'}
+          justifyContent={'flex-end'}
+        >
+          <ConvertButtons />
           <SwitchFormatButton
             nextColumnFormat={nextColumnFormat}
             onToggleFormat={toggleColumnsFormat}

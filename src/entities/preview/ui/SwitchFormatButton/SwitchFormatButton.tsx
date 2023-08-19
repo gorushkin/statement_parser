@@ -13,7 +13,7 @@ const SwitchFormatButton: FC<SwitchFormatButtonProps> = ({
   onToggleFormat,
 }) => {
   return (
-    <Button background={'orange.300'} onClick={onToggleFormat}>
+    <Button colorScheme="orange" onClick={onToggleFormat}>
       Switch Format to {nextColumnFormat}
     </Button>
   );
