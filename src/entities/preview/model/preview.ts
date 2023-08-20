@@ -1,28 +1,22 @@
 import { makeAutoObservable, toJS } from 'mobx';
 import Papa from 'papaparse';
 import { BooleanFlag } from 'src/shared/booleanFlag';
+import { Currency } from 'src/shared/types';
 
 import {
   initCurrencies,
   initPreviewRecords,
   previewColumns,
 } from './constants';
-import {
-  ConvertDirection,
-  Currency,
-  Header,
-  PreviewRecord,
-  StatementRecord,
-} from './types';
+import { ConvertDirection, Header, StatementRecord } from './types';
 
 export class Preview {
   name = '';
   headers = [] as Header[];
-  previewRecords = [] as PreviewRecord[];
   originalRecords = [] as StatementRecord[];
-  resultRecords = [] as StatementRecord[];
+  private resultRecords = [] as StatementRecord[];
 
-  columns = previewColumns;
+  private columns = previewColumns;
 
   currencies = initCurrencies;
   isConvertingEnabled = new BooleanFlag(false);
@@ -63,8 +57,8 @@ export class Preview {
   };
 
   private setPreviewRecords = () => {
-    const length = Math.min(5, this.originalRecords.length);
-    this.previewRecords = Array.from({ length }, () => ({
+    const length = this.originalRecords.length;
+    this.resultRecords = Array.from({ length }, () => ({
       ...initPreviewRecords,
     }));
   };
@@ -80,18 +74,26 @@ export class Preview {
     this.name = '';
     this.headers = [];
     this.originalRecords = [];
-    this.previewRecords = [];
     this.resultRecords = [];
     this.isConvertingEnabled.setFalse();
     this.currencies = initCurrencies;
   };
 
+  get previewRecords() {
+    const length = Math.min(5, this.resultRecords.length);
+    return this.resultRecords.slice(0, length);
+  }
+
+  get visibleColumns() {
+    return this.columns.filter(({ visible }) => !!visible);
+  }
+
   public saveStatement = () => {
-    console.log(toJS(this.previewRecords));
+    console.log(toJS(this.resultRecords));
   };
 
   public updatePreview = (key: string, rowKey: string) => {
-    this.previewRecords = this.previewRecords.map((item, i) => {
+    this.resultRecords = this.resultRecords.map((item, i) => {
       const rowValue = this.originalRecords[i][rowKey];
       return { ...item, [key]: rowValue };
     });

@@ -1,9 +1,10 @@
 import { Box, Button } from '@chakra-ui/react';
 import { observer } from 'mobx-react';
-import { Select } from 'src/shared/Select';
+import { Currency } from 'src/shared/types';
+import { Select } from 'src/shared/ui/Select';
 
 import { preview } from '../..';
-import { ConvertDirection, Currency } from '../../model/types';
+import { ConvertDirection } from '../../model/types';
 
 const options = Object.values(Currency);
 const fields = Object.values(ConvertDirection);

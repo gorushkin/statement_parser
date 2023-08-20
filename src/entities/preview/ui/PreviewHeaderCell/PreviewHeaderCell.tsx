@@ -1,7 +1,8 @@
 import { Box, Th } from '@chakra-ui/react';
 import { FC, useState } from 'react';
-import { COLUMN } from 'src/entities/preview';
-import { Select } from 'src/shared/Select';
+import { Select } from 'src/shared/ui/Select';
+
+import { COLUMN } from '../../model/types';
 
 interface PreviewHeaderCellProps {
   headers: string[];

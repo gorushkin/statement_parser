@@ -1,4 +1,6 @@
-import { Column, COLUMN, Currencies, Currency } from './types';
+import { Currency } from 'src/shared/types';
+
+import { Column, COLUMN, Currencies } from './types';
 
 export const initCurrencies: Currencies = {
   fromCurrency: Currency.NZD,
@@ -13,9 +15,7 @@ export const previewColumns: Column[] = [
   { name: COLUMN.ORIGINAL_AMOUNT, visible: false },
 ];
 
-export const initPreviewRecords = previewColumns
-  .filter(({ visible }) => !!visible)
-  .reduce(
-    (acc, { name }) => ({ ...acc, [name]: '' }),
-    {} as Record<COLUMN, string>
-  );
+export const initPreviewRecords = previewColumns.reduce(
+  (acc, { name }) => ({ ...acc, [name]: '' }),
+  {} as Record<COLUMN, string>
+);

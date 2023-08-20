@@ -5,12 +5,12 @@ import { preview } from '../..';
 import { PreviewHeaderCell } from '../PreviewHeaderCell';
 
 const PreviewHeader = observer(() => {
-  const { columns, headers, updatePreview } = preview;
+  const { headers, updatePreview, visibleColumns } = preview;
 
   return (
     <Thead>
       <Tr>
-        {columns.map(({ name, visible }) => (
+        {visibleColumns.map(({ name, visible }) => (
           <PreviewHeaderCell
             headers={headers}
             key={name}
