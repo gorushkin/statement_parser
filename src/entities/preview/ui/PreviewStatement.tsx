@@ -1,7 +1,7 @@
 import { Box, Heading } from '@chakra-ui/react';
 import { ITable } from 'src/shared/ui/Table';
 
-import { ConvertButtons } from './ConvertButtons';
+import { ConvertButtons } from '../../../features/CurrencyConvertButtons';
 import { PreviewBody } from './PreviewBody';
 import { PreviewHeader } from './PreviewHeader';
 

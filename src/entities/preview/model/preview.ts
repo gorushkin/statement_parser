@@ -1,5 +1,6 @@
 import { makeAutoObservable, toJS } from 'mobx';
 import Papa from 'papaparse';
+import { getRates } from 'src/shared/api/api';
 import { BooleanFlag } from 'src/shared/booleanFlag';
 import { Currency } from 'src/shared/types';
 
@@ -8,14 +9,21 @@ import {
   initPreviewRecords,
   previewColumns,
 } from './constants';
-import { ConvertDirection, Header, StatementRecord } from './types';
+import {
+  COLUMN,
+  ConvertDirection,
+  Header,
+  PreviewRecord,
+  StatementRecord,
+} from './types';
 
 export class Preview {
   name = '';
   headers = [] as Header[];
   originalRecords = [] as StatementRecord[];
-  private resultRecords = [] as StatementRecord[];
 
+  private resultRecords = [] as PreviewRecord[];
+  private tempResultRecords = [] as PreviewRecord[];
   private columns = previewColumns;
 
   currencies = initCurrencies;
@@ -97,5 +105,24 @@ export class Preview {
       const rowValue = this.originalRecords[i][rowKey];
       return { ...item, [key]: rowValue };
     });
+  };
+
+  public updateRates = async () => {
+    const dates = this.resultRecords.map(({ date }) => new Date(date));
+    const rates = await Promise.all(dates.map(getRates));
+    this.tempResultRecords = this.resultRecords;
+    this.resultRecords = this.resultRecords.map((record, index) => ({
+      ...record,
+      [COLUMN.AMOUNT]: rates[index][this.currencies.toCurrency],
+    }));
+  };
+
+  public resetRates = () => {
+    this.resultRecords = this.tempResultRecords;
+    this.tempResultRecords = [];
+  };
+
+  public saveRates = () => {
+    this.tempResultRecords = [];
   };
 }
