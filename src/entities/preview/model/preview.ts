@@ -45,7 +45,7 @@ export class Preview {
     this.isConvertingEnabled.toggle();
   };
 
-  private setInputTransactions = (data: string) => {
+  private setOriginalRecords = (data: string) => {
     const isRowEmpty = (row: StatementRecord) =>
       !!Object.values(row).reduce((acc, item) => acc + item, '');
 
@@ -62,7 +62,7 @@ export class Preview {
     this.headers = result.data[0].map((item) => item.toLowerCase());
   };
 
-  private setTransactions = () => {
+  private setPreviewRecords = () => {
     const length = Math.min(5, this.originalRecords.length);
     this.previewRecords = Array.from({ length }, () => ({
       ...initPreviewRecords,
@@ -72,8 +72,8 @@ export class Preview {
   public createPreview = (data: ArrayBuffer | string, name: string) => {
     this.name = name;
     this.setHeaders(data.toString());
-    this.setInputTransactions(data.toString());
-    this.setTransactions();
+    this.setOriginalRecords(data.toString());
+    this.setPreviewRecords();
   };
 
   public resetPreview = () => {
@@ -88,7 +88,6 @@ export class Preview {
 
   public saveStatement = () => {
     console.log(toJS(this.previewRecords));
-    console.log(this.currencies);
   };
 
   public updatePreview = (key: string, rowKey: string) => {
