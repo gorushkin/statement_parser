@@ -4,7 +4,6 @@ import { ITable } from 'src/shared/ui/Table';
 import { ConvertButtons } from './ConvertButtons';
 import { PreviewBody } from './PreviewBody';
 import { PreviewHeader } from './PreviewHeader';
-import { SwitchFormatButton } from './SwitchFormatButton';
 
 const PreviewStatement = () => (
   <Box>
@@ -19,7 +18,6 @@ const PreviewStatement = () => (
         justifyContent={'flex-end'}
       >
         <ConvertButtons />
-        <SwitchFormatButton />
       </Box>
     </Box>
     <ITable>

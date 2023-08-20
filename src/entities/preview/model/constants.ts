@@ -1,22 +1,21 @@
-import { COLUMN } from '..';
-import { ColumnFormat } from '../constants';
-import { Currencies, Currency } from './types';
-
-export const conditionMapping: Record<
-  ColumnFormat,
-  (column: COLUMN) => boolean
-> = {
-  [ColumnFormat.AMOUNT]: (column) =>
-    column !== COLUMN.OUTFLOW && column !== COLUMN.INFLOW,
-  [ColumnFormat.INOUT]: (column) => column !== COLUMN.AMOUNT,
-};
-
-export const columnFormatMap = {
-  [ColumnFormat.AMOUNT]: ColumnFormat.INOUT,
-  [ColumnFormat.INOUT]: ColumnFormat.AMOUNT,
-};
+import { Column, COLUMN, Currencies, Currency } from './types';
 
 export const initCurrencies: Currencies = {
   fromCurrency: Currency.NZD,
   toCurrency: Currency.RUB,
 };
+
+export const previewColumns: Column[] = [
+  { name: COLUMN.DATE, visible: true },
+  { name: COLUMN.PAYEE, visible: true },
+  { name: COLUMN.MEMO, visible: true },
+  { name: COLUMN.AMOUNT, visible: true },
+  { name: COLUMN.ORIGINAL_AMOUNT, visible: false },
+];
+
+export const initPreviewRecords = previewColumns
+  .filter(({ visible }) => !!visible)
+  .reduce(
+    (acc, { name }) => ({ ...acc, [name]: '' }),
+    {} as Record<COLUMN, string>
+  );

@@ -2,28 +2,27 @@ import { makeAutoObservable, toJS } from 'mobx';
 import Papa from 'papaparse';
 import { BooleanFlag } from 'src/shared/booleanFlag';
 
-import { ColumnFormat, columns, transaction } from '../constants';
-import { columnFormatMap, conditionMapping, initCurrencies } from './constants';
+import {
+  initCurrencies,
+  initPreviewRecords,
+  previewColumns,
+} from './constants';
 import {
   ConvertDirection,
   Currency,
   Header,
+  PreviewRecord,
   StatementRecord,
-  Transaction,
 } from './types';
 
 export class Preview {
   name = '';
   headers = [] as Header[];
-  previewRecords = [] as Transaction[];
+  previewRecords = [] as PreviewRecord[];
   originalRecords = [] as StatementRecord[];
   resultRecords = [] as StatementRecord[];
-  columnFormat: ColumnFormat = ColumnFormat.AMOUNT;
 
-  columns = columns.map((column) => ({
-    name: column,
-    visible: conditionMapping[this.columnFormat](column),
-  }));
+  columns = previewColumns;
 
   currencies = initCurrencies;
   isConvertingEnabled = new BooleanFlag(false);
@@ -46,18 +45,6 @@ export class Preview {
     this.isConvertingEnabled.toggle();
   };
 
-  public toggleColumnsFormat = () => {
-    this.columnFormat = columnFormatMap[this.columnFormat];
-    this.columns = this.columns.map(({ name }) => ({
-      name,
-      visible: conditionMapping[this.columnFormat](name),
-    }));
-  };
-
-  get nextColumnFormat() {
-    return columnFormatMap[this.columnFormat];
-  }
-
   private setInputTransactions = (data: string) => {
     const isRowEmpty = (row: StatementRecord) =>
       !!Object.values(row).reduce((acc, item) => acc + item, '');
@@ -76,9 +63,9 @@ export class Preview {
   };
 
   private setTransactions = () => {
-    const transactionsCount = Math.min(5, this.originalRecords.length);
-    this.previewRecords = Array.from({ length: transactionsCount }, () => ({
-      ...transaction,
+    const length = Math.min(5, this.originalRecords.length);
+    this.previewRecords = Array.from({ length }, () => ({
+      ...initPreviewRecords,
     }));
   };
 
@@ -95,7 +82,6 @@ export class Preview {
     this.originalRecords = [];
     this.previewRecords = [];
     this.resultRecords = [];
-    this.columnFormat = ColumnFormat.AMOUNT;
     this.isConvertingEnabled.setFalse();
     this.currencies = initCurrencies;
   };
