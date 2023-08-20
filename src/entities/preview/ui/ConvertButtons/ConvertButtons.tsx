@@ -17,7 +17,7 @@ const ConvertButtons = observer(() => {
   const { currencies, isConvertingEnabled, setCurrencies, toggleConverting } =
     preview;
 
-  const buttonText = isConvertingEnabled ? 'x' : 'Convert';
+  const buttonText = isConvertingEnabled.value ? 'x' : 'Convert';
 
   const handleChange = (valueStr: string, nameStr: string) => {
     const name = nameStr as ConvertDirection;
@@ -27,7 +27,7 @@ const ConvertButtons = observer(() => {
 
   return (
     <>
-      {isConvertingEnabled && (
+      {isConvertingEnabled.value && (
         <Box display={'flex'} gap={'1rem'}>
           {fields.map((value) => (
             <Select

@@ -1,5 +1,6 @@
 import { makeAutoObservable, toJS } from 'mobx';
 import Papa from 'papaparse';
+import { BooleanFlag } from 'src/shared/booleanFlag';
 
 import { COLUMN, ColumnFormat, columns, transaction } from '../constants';
 import {
@@ -32,10 +33,10 @@ export class Preview {
     fromCurrency: Currency.NZD,
     toCurrency: Currency.RUB,
   };
-  isConvertingEnabled = false;
+  isConvertingEnabled = new BooleanFlag(false);
 
   constructor() {
-    makeAutoObservable(this);
+    makeAutoObservable(this, {}, { autoBind: true });
   }
 
   public setCurrencies = ({
@@ -49,7 +50,7 @@ export class Preview {
   };
 
   public toggleConverting = () => {
-    this.isConvertingEnabled = !this.isConvertingEnabled;
+    this.isConvertingEnabled.toggle();
   };
 
   public toggleColumnsFormat = () => {
