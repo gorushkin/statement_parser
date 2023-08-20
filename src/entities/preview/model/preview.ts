@@ -8,7 +8,7 @@ import {
   Currencies,
   Currency,
   Header,
-  InputRecord,
+  StatementRecord,
   Transaction,
 } from './types';
 
@@ -27,7 +27,8 @@ export class Preview {
   name = '';
   headers = [] as Header[];
   transactions = [] as Transaction[];
-  inputRecords = [] as InputRecord[];
+  inputRecords = [] as StatementRecord[];
+  outputRecords = [] as StatementRecord[];
   columnFormat: ColumnFormat = ColumnFormat.AMOUNT;
   columns = columns.map((column) => ({
     name: column,
@@ -70,10 +71,10 @@ export class Preview {
   }
 
   private setInputTransactions = (data: string) => {
-    const isRowEmpty = (row: InputRecord) =>
+    const isRowEmpty = (row: StatementRecord) =>
       !!Object.values(row).reduce((acc, item) => acc + item, '');
 
-    const result = Papa.parse<InputRecord>(data, {
+    const result = Papa.parse<StatementRecord>(data, {
       header: true,
       transformHeader: (header) => header.toLowerCase(),
     });

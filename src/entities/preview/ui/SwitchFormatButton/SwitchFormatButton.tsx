@@ -1,22 +1,16 @@
 import { Button } from '@chakra-ui/react';
-import { FC } from 'react';
+import { observer } from 'mobx-react';
 
-import { ColumnFormat } from '../../constants';
+import { preview } from '../..';
 
-interface SwitchFormatButtonProps {
-  nextColumnFormat: ColumnFormat;
-  onToggleFormat: () => void;
-}
+const SwitchFormatButton = observer(() => {
+  const { nextColumnFormat, toggleColumnsFormat } = preview;
 
-const SwitchFormatButton: FC<SwitchFormatButtonProps> = ({
-  nextColumnFormat,
-  onToggleFormat,
-}) => {
   return (
-    <Button colorScheme="orange" onClick={onToggleFormat}>
+    <Button colorScheme="orange" onClick={toggleColumnsFormat}>
       Switch Format to {nextColumnFormat}
     </Button>
   );
-};
+});
 
 export { SwitchFormatButton };
