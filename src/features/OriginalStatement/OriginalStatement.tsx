@@ -3,7 +3,7 @@ import { observer } from 'mobx-react';
 import { preview } from 'src/entities/preview';
 import { ITable } from 'src/shared/ui/Table';
 
-const InputStatement = observer(() => {
+const OriginalStatement = observer(() => {
   const { headers, originalRecords } = preview;
 
   return (
@@ -33,4 +33,4 @@ const InputStatement = observer(() => {
   );
 });
 
-export { InputStatement };
+export { OriginalStatement };

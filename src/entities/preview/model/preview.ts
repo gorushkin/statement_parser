@@ -2,10 +2,10 @@ import { makeAutoObservable, toJS } from 'mobx';
 import Papa from 'papaparse';
 import { BooleanFlag } from 'src/shared/booleanFlag';
 
-import { COLUMN, ColumnFormat, columns, transaction } from '../constants';
+import { ColumnFormat, columns, transaction } from '../constants';
+import { columnFormatMap, conditionMapping, initCurrencies } from './constants';
 import {
   ConvertDirection,
-  Currencies,
   Currency,
   Header,
   StatementRecord,
@@ -13,35 +13,23 @@ import {
 } from './types';
 
 export class Preview {
-  conditionMapping: Record<ColumnFormat, (column: COLUMN) => boolean> = {
-    [ColumnFormat.AMOUNT]: (column) =>
-      column !== COLUMN.OUTFLOW && column !== COLUMN.INFLOW,
-    [ColumnFormat.INOUT]: (column) => column !== COLUMN.AMOUNT,
-  };
-
-  columnFormatMap = {
-    [ColumnFormat.AMOUNT]: ColumnFormat.INOUT,
-    [ColumnFormat.INOUT]: ColumnFormat.AMOUNT,
-  };
-
   name = '';
   headers = [] as Header[];
   previewRecords = [] as Transaction[];
   originalRecords = [] as StatementRecord[];
   resultRecords = [] as StatementRecord[];
   columnFormat: ColumnFormat = ColumnFormat.AMOUNT;
+
   columns = columns.map((column) => ({
     name: column,
-    visible: this.conditionMapping[this.columnFormat](column),
+    visible: conditionMapping[this.columnFormat](column),
   }));
-  currencies: Currencies = {
-    fromCurrency: Currency.NZD,
-    toCurrency: Currency.RUB,
-  };
+
+  currencies = initCurrencies;
   isConvertingEnabled = new BooleanFlag(false);
 
   constructor() {
-    makeAutoObservable(this, {}, { autoBind: true });
+    makeAutoObservable(this);
   }
 
   public setCurrencies = ({
@@ -59,15 +47,15 @@ export class Preview {
   };
 
   public toggleColumnsFormat = () => {
-    this.columnFormat = this.columnFormatMap[this.columnFormat];
+    this.columnFormat = columnFormatMap[this.columnFormat];
     this.columns = this.columns.map(({ name }) => ({
       name,
-      visible: this.conditionMapping[this.columnFormat](name),
+      visible: conditionMapping[this.columnFormat](name),
     }));
   };
 
   get nextColumnFormat() {
-    return this.columnFormatMap[this.columnFormat];
+    return columnFormatMap[this.columnFormat];
   }
 
   private setInputTransactions = (data: string) => {
@@ -106,10 +94,15 @@ export class Preview {
     this.headers = [];
     this.originalRecords = [];
     this.previewRecords = [];
+    this.resultRecords = [];
+    this.columnFormat = ColumnFormat.AMOUNT;
+    this.isConvertingEnabled.setFalse();
+    this.currencies = initCurrencies;
   };
 
   public saveStatement = () => {
     console.log(toJS(this.previewRecords));
+    console.log(this.currencies);
   };
 
   public updatePreview = (key: string, rowKey: string) => {

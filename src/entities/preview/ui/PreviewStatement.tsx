@@ -6,7 +6,7 @@ import { PreviewBody } from './PreviewBody';
 import { PreviewHeader } from './PreviewHeader';
 import { SwitchFormatButton } from './SwitchFormatButton';
 
-const PreviewTable = () => (
+const PreviewStatement = () => (
   <Box>
     <Box display={'flex'} justifyContent={'space-between'} mb={'1rem'}>
       <Heading as="h1" mb={'1rem'} size="lg">
@@ -29,4 +29,4 @@ const PreviewTable = () => (
   </Box>
 );
 
-export { PreviewTable };
+export { PreviewStatement };
