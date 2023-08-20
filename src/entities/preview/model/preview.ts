@@ -19,16 +19,20 @@ export class Preview {
     [ColumnFormat.INOUT]: (column) => column !== COLUMN.AMOUNT,
   };
 
+  columnFormatMap = {
+    [ColumnFormat.AMOUNT]: ColumnFormat.INOUT,
+    [ColumnFormat.INOUT]: ColumnFormat.AMOUNT,
+  };
+
   name = '';
   headers = [] as Header[];
   transactions = [] as Transaction[];
   inputRecords = [] as InputRecord[];
-  currentColumnFormat: ColumnFormat = ColumnFormat.INOUT;
+  columnFormat: ColumnFormat = ColumnFormat.AMOUNT;
   columns = columns.map((column) => ({
     name: column,
-    visible: this.conditionMapping[ColumnFormat.INOUT](column),
+    visible: this.conditionMapping[this.columnFormat](column),
   }));
-  nextColumnFormat: ColumnFormat = ColumnFormat.AMOUNT;
   currencies: Currencies = {
     fromCurrency: Currency.NZD,
     toCurrency: Currency.RUB,
@@ -54,18 +58,16 @@ export class Preview {
   };
 
   public toggleColumnsFormat = () => {
-    const switchFormatMap = {
-      [ColumnFormat.AMOUNT]: ColumnFormat.INOUT,
-      [ColumnFormat.INOUT]: ColumnFormat.AMOUNT,
-    };
-
-    this.currentColumnFormat = switchFormatMap[this.currentColumnFormat];
-    this.nextColumnFormat = switchFormatMap[this.currentColumnFormat];
+    this.columnFormat = this.columnFormatMap[this.columnFormat];
     this.columns = this.columns.map(({ name }) => ({
       name,
-      visible: this.conditionMapping[this.currentColumnFormat](name),
+      visible: this.conditionMapping[this.columnFormat](name),
     }));
   };
+
+  get nextColumnFormat() {
+    return this.columnFormatMap[this.columnFormat];
+  }
 
   private setInputTransactions = (data: string) => {
     const isRowEmpty = (row: InputRecord) =>
@@ -85,9 +87,10 @@ export class Preview {
   };
 
   private setTransactions = () => {
-    this.transactions = new Array<Record<COLUMN, string>>(
-      Math.min(5, this.inputRecords.length)
-    ).fill(transaction);
+    const transactionsCount = Math.min(5, this.inputRecords.length);
+    this.transactions = Array.from({ length: transactionsCount }, () => ({
+      ...transaction,
+    }));
   };
 
   public createPreview = (data: ArrayBuffer | string, name: string) => {
@@ -101,7 +104,6 @@ export class Preview {
     this.name = '';
     this.headers = [];
     this.inputRecords = [];
-    this.transactions = [];
     this.transactions = [];
   };
 
