@@ -1,9 +1,7 @@
-import {
-  Select as ChakraSelect,
-  FormControl,
-  FormLabel,
-} from '@chakra-ui/react';
+import { Box, Select as ChakraSelect, useBoolean } from '@chakra-ui/react';
 import { ChangeEvent, FC } from 'react';
+
+import { horizontalStyles, verticalStyles } from './styles';
 
 interface SelectProps {
   label?: string;
@@ -11,18 +9,28 @@ interface SelectProps {
   onChange: (value: string, name: string) => void;
   options: string[];
   value?: string;
+  vertical?: boolean;
 }
 
-const Select: FC<SelectProps> = ({ label, name, onChange, options, value }) => {
+const Select: FC<SelectProps> = ({
+  label,
+  name,
+  onChange,
+  options,
+  value,
+  vertical = false,
+}) => {
   const handleCHange = ({
     target: { value },
   }: ChangeEvent<HTMLSelectElement>) => {
-    onChange(value, name || '');
+    onChange(value, name ?? '');
   };
 
+  const styles = vertical ? verticalStyles : horizontalStyles;
+
   return (
-    <FormControl alignItems={'center'} display={'flex'}>
-      {label && <FormLabel mb={0}>{label}</FormLabel>}
+    <Box alignItems={'center'} {...styles.wrapper}>
+      {label && <Box {...styles.label}>{label}</Box>}
       <ChakraSelect
         minW={'100px'}
         name="currentCurrency"
@@ -35,7 +43,7 @@ const Select: FC<SelectProps> = ({ label, name, onChange, options, value }) => {
           </option>
         ))}
       </ChakraSelect>
-    </FormControl>
+    </Box>
   );
 };
 
