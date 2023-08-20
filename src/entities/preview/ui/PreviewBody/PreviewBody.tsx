@@ -5,11 +5,11 @@ import { preview } from '../..';
 import { PreviewRow } from '../PreviewRow';
 
 const PreviewBody = observer(() => {
-  const { columns, transactions } = preview;
+  const { columns, previewRecords } = preview;
 
   return (
     <Tbody>
-      {transactions.map((row, index) => (
+      {previewRecords.map((row, index) => (
         <PreviewRow columns={columns} key={index} row={row} />
       ))}
     </Tbody>

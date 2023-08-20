@@ -26,9 +26,9 @@ export class Preview {
 
   name = '';
   headers = [] as Header[];
-  transactions = [] as Transaction[];
-  inputRecords = [] as StatementRecord[];
-  outputRecords = [] as StatementRecord[];
+  previewRecords = [] as Transaction[];
+  originalRecords = [] as StatementRecord[];
+  resultRecords = [] as StatementRecord[];
   columnFormat: ColumnFormat = ColumnFormat.AMOUNT;
   columns = columns.map((column) => ({
     name: column,
@@ -79,7 +79,7 @@ export class Preview {
       transformHeader: (header) => header.toLowerCase(),
     });
 
-    this.inputRecords = result.data.filter(isRowEmpty);
+    this.originalRecords = result.data.filter(isRowEmpty);
   };
 
   private setHeaders = (data: string) => {
@@ -88,8 +88,8 @@ export class Preview {
   };
 
   private setTransactions = () => {
-    const transactionsCount = Math.min(5, this.inputRecords.length);
-    this.transactions = Array.from({ length: transactionsCount }, () => ({
+    const transactionsCount = Math.min(5, this.originalRecords.length);
+    this.previewRecords = Array.from({ length: transactionsCount }, () => ({
       ...transaction,
     }));
   };
@@ -104,17 +104,17 @@ export class Preview {
   public resetPreview = () => {
     this.name = '';
     this.headers = [];
-    this.inputRecords = [];
-    this.transactions = [];
+    this.originalRecords = [];
+    this.previewRecords = [];
   };
 
   public saveStatement = () => {
-    console.log(toJS(this.transactions));
+    console.log(toJS(this.previewRecords));
   };
 
   public updatePreview = (key: string, rowKey: string) => {
-    this.transactions = this.transactions.map((item, i) => {
-      const rowValue = this.inputRecords[i][rowKey];
+    this.previewRecords = this.previewRecords.map((item, i) => {
+      const rowValue = this.originalRecords[i][rowKey];
       return { ...item, [key]: rowValue };
     });
   };
