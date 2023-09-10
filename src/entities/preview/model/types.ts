@@ -9,7 +9,6 @@ export enum COLUMN {
   PAYEE = 'payee',
   MEMO = 'memo',
   AMOUNT = 'amount',
-  ORIGINAL_AMOUNT = 'originalAmount',
 }
 
 export type PreviewRecord = Record<COLUMN, string>;

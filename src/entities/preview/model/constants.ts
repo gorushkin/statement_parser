@@ -12,7 +12,6 @@ export const previewColumns: Column[] = [
   { name: COLUMN.PAYEE, visible: true },
   { name: COLUMN.MEMO, visible: true },
   { name: COLUMN.AMOUNT, visible: true },
-  { name: COLUMN.ORIGINAL_AMOUNT, visible: false },
 ];
 
 export const initPreviewRecords = previewColumns.reduce(

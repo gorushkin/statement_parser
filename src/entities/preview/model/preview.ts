@@ -128,4 +128,18 @@ export class Preview {
   public saveRates = () => {
     this.tempResultRecords = [];
   };
+
+  get CSV() {
+    const addQuotes = (value: string) => `"${value}"`;
+
+    const getStringRow = (row: PreviewRecord) =>
+      Object.values(row).map(addQuotes).join(',');
+
+    const headersRow = this.headers.map(addQuotes).join(',');
+    const recordRows = this.resultRecords.map(getStringRow);
+
+    const file = headersRow + '\n' + recordRows.join('\n');
+
+    return { file, name: this.name };
+  }
 }

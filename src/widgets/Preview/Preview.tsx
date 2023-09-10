@@ -7,14 +7,14 @@ import { PageHeader } from 'src/features/PageHeader';
 import { ROUTE } from 'src/shared/routes';
 
 const Preview = observer(() => {
-  const { name, resetPreview, saveStatement } = preview;
+  const { name } = preview;
 
   if (!name) return <Navigate replace to={ROUTE.ROOT} />;
 
   return (
     <>
       <Box mb={'1rem'}>
-        <PageHeader name={name} onReset={resetPreview} onSave={saveStatement} />
+        <PageHeader />
       </Box>
       <Box mb={'1rem'}>
         <PreviewStatement />
