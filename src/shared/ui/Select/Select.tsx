@@ -1,4 +1,4 @@
-import { Box, Select as ChakraSelect, useBoolean } from '@chakra-ui/react';
+import { Box, Select as ChakraSelect } from '@chakra-ui/react';
 import { ChangeEvent, FC } from 'react';
 
 import { horizontalStyles, verticalStyles } from './styles';
