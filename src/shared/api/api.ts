@@ -2,17 +2,16 @@ import { Currency } from '../types';
 
 type GetRatesResponse = Record<Currency, string>;
 
-type GetRates = (date: Date) => Promise<GetRatesResponse>;
+type GetRates = (date: Date | null) => Promise<GetRatesResponse>;
 
 // TODO: send not one date but list
 
 export const getRates: GetRates = async (date) => {
-  const pref = date.toString();
   const response: GetRatesResponse = {
-    nzd: `nzd_${pref}`,
-    rub: `rub_${pref}`,
-    try: `try_${pref}`,
-    usd: `usd_${pref}`,
+    nzd: date ? '25' : '',
+    rub: date ? '25' : '',
+    try: date ? '25' : '',
+    usd: date ? '25' : '',
   };
 
   return Promise.resolve(response);

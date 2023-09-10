@@ -108,7 +108,10 @@ export class Preview {
   };
 
   public updateRates = async () => {
-    const dates = this.resultRecords.map(({ date }) => new Date(date));
+    const dates = this.resultRecords.map(({ date }) => {
+      const result = new Date(date);
+      return result.toString() === 'Invalid Date' ? null : result;
+    });
     const rates = await Promise.all(dates.map(getRates));
     this.tempResultRecords = this.resultRecords;
     this.resultRecords = this.resultRecords.map((record, index) => ({

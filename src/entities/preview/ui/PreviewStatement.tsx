@@ -1,7 +1,7 @@
 import { Box, Heading } from '@chakra-ui/react';
 import { ITable } from 'src/shared/ui/Table';
 
-import { ConvertButtons } from '../../../features/CurrencyConvertButtons';
+// import { ConvertButtons } from '../../../features/CurrencyConvertButtons';
 import { PreviewBody } from './PreviewBody';
 import { PreviewHeader } from './PreviewHeader';
 
@@ -17,7 +17,7 @@ const PreviewStatement = () => (
         gap={'1rem'}
         justifyContent={'flex-end'}
       >
-        <ConvertButtons />
+        {/* <ConvertButtons /> */}
       </Box>
     </Box>
     <ITable>
