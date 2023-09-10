@@ -13,3 +13,9 @@ export const numberToMoney = (value: number, decimalPlaces = 2) =>
     maximumFractionDigits: decimalPlaces,
     minimumFractionDigits: decimalPlaces,
   })}`;
+
+
+  export const getFileExtension = (filename: string) => {
+    const parts = filename.split('.');
+    return parts[parts.length - 1];
+  };
