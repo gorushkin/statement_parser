@@ -1,6 +1,8 @@
-import { Box, Select, Th } from '@chakra-ui/react';
+import { Box, Th } from '@chakra-ui/react';
 import { FC, useState } from 'react';
-import { COLUMN } from 'src/entities/preview';
+import { Select } from 'src/shared/ui/Select';
+
+import { COLUMN } from '../../model/types';
 
 interface PreviewHeaderCellProps {
   headers: string[];
@@ -17,24 +19,25 @@ const PreviewHeaderCell: FC<PreviewHeaderCellProps> = ({
 }) => {
   const [value, setValue] = useState<string>('');
 
-  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setValue(e.target.value);
-    onChange(name, e.target.value);
+  const handleChange = (value: string) => {
+    setValue(value);
+    onChange(name, value);
   };
 
   if (!visible) return null;
 
+  const options = ['', ...headers];
+
   return (
     <Th>
-      <Box>{name}</Box>
       <Box>
-        <Select name={name} onChange={handleChange} value={value}>
-          {['', ...headers].map((header, i) => (
-            <option key={i} value={header}>
-              {header}
-            </option>
-          ))}
-        </Select>
+        <Select
+          label={name}
+          onChange={handleChange}
+          options={options}
+          value={value}
+          vertical
+        />
       </Box>
     </Th>
   );

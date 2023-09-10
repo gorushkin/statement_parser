@@ -1,55 +1,62 @@
 import { makeAutoObservable, toJS } from 'mobx';
 import Papa from 'papaparse';
+import { getRates } from 'src/shared/api/api';
+import { BooleanFlag } from 'src/shared/booleanFlag';
+import { Currency } from 'src/shared/types';
 
-import { COLUMN, ColumnFormat, columns, transaction } from '../constants';
-import { Header, InputRecord, Transaction } from './types';
-
-const conditionMapping: Record<ColumnFormat, (column: COLUMN) => boolean> = {
-  [ColumnFormat.AMOUNT]: (column) =>
-    column !== COLUMN.OUTFLOW && column !== COLUMN.INFLOW,
-  [ColumnFormat.INOUT]: (column) => column !== COLUMN.AMOUNT,
-};
+import {
+  initCurrencies,
+  initPreviewRecords,
+  previewColumns,
+} from './constants';
+import {
+  COLUMN,
+  ConvertDirection,
+  Header,
+  PreviewRecord,
+  StatementRecord,
+} from './types';
 
 export class Preview {
   name = '';
   headers = [] as Header[];
-  transactions = [] as Transaction[];
-  inputRecords = [] as InputRecord[];
-  currentColumnFormat: ColumnFormat = ColumnFormat.INOUT;
-  columns = columns.map((column) => ({
-    name: column,
-    visible: conditionMapping[ColumnFormat.INOUT](column),
-  }));
-  nextColumnFormat: ColumnFormat = ColumnFormat.AMOUNT;
+  originalRecords = [] as StatementRecord[];
+
+  private resultRecords = [] as PreviewRecord[];
+  private tempResultRecords = [] as PreviewRecord[];
+  private columns = previewColumns;
+
+  currencies = initCurrencies;
+  isConvertingEnabled = new BooleanFlag(false);
 
   constructor() {
     makeAutoObservable(this);
   }
 
-  public toggleColumnsFormat = () => {
-    const switchFormatMap = {
-      [ColumnFormat.AMOUNT]: ColumnFormat.INOUT,
-      [ColumnFormat.INOUT]: ColumnFormat.AMOUNT,
-    };
-
-    this.currentColumnFormat = switchFormatMap[this.currentColumnFormat];
-    this.nextColumnFormat = switchFormatMap[this.currentColumnFormat];
-    this.columns = this.columns.map(({ name }) => ({
-      name,
-      visible: conditionMapping[this.currentColumnFormat](name),
-    }));
+  public setCurrencies = ({
+    name,
+    value,
+  }: {
+    name: ConvertDirection;
+    value: Currency;
+  }) => {
+    this.currencies = { ...this.currencies, [name]: value };
   };
 
-  private setInputTransactions = (data: string) => {
-    const isRowEmpty = (row: InputRecord) =>
+  public toggleConverting = () => {
+    this.isConvertingEnabled.toggle();
+  };
+
+  private setOriginalRecords = (data: string) => {
+    const isRowEmpty = (row: StatementRecord) =>
       !!Object.values(row).reduce((acc, item) => acc + item, '');
 
-    const result = Papa.parse<InputRecord>(data, {
+    const result = Papa.parse<StatementRecord>(data, {
       header: true,
       transformHeader: (header) => header.toLowerCase(),
     });
 
-    this.inputRecords = result.data.filter(isRowEmpty);
+    this.originalRecords = result.data.filter(isRowEmpty);
   };
 
   private setHeaders = (data: string) => {
@@ -57,35 +64,82 @@ export class Preview {
     this.headers = result.data[0].map((item) => item.toLowerCase());
   };
 
-  private setTransactions = () => {
-    this.transactions = new Array<Record<COLUMN, string>>(
-      Math.min(5, this.inputRecords.length)
-    ).fill(transaction);
+  private setPreviewRecords = () => {
+    const length = this.originalRecords.length;
+    this.resultRecords = Array.from({ length }, () => ({
+      ...initPreviewRecords,
+    }));
   };
 
   public createPreview = (data: ArrayBuffer | string, name: string) => {
     this.name = name;
     this.setHeaders(data.toString());
-    this.setInputTransactions(data.toString());
-    this.setTransactions();
+    this.setOriginalRecords(data.toString());
+    this.setPreviewRecords();
   };
 
   public resetPreview = () => {
     this.name = '';
     this.headers = [];
-    this.inputRecords = [];
-    this.transactions = [];
-    this.transactions = [];
+    this.originalRecords = [];
+    this.resultRecords = [];
+    this.isConvertingEnabled.setFalse();
+    this.currencies = initCurrencies;
   };
 
+  get previewRecords() {
+    const length = Math.min(5, this.resultRecords.length);
+    return this.resultRecords.slice(0, length);
+  }
+
+  get visibleColumns() {
+    return this.columns.filter(({ visible }) => !!visible);
+  }
+
   public saveStatement = () => {
-    console.log(toJS(this.transactions));
+    console.log(toJS(this.resultRecords));
   };
 
   public updatePreview = (key: string, rowKey: string) => {
-    this.transactions = this.transactions.map((item, i) => {
-      const rowValue = this.inputRecords[i][rowKey];
+    this.resultRecords = this.resultRecords.map((item, i) => {
+      const rowValue = this.originalRecords[i][rowKey];
       return { ...item, [key]: rowValue };
     });
   };
+
+  public updateRates = async () => {
+    const dates = this.resultRecords.map(({ date }) => {
+      const result = new Date(date);
+      return result.toString() === 'Invalid Date' ? null : result;
+    });
+    const rates = await Promise.all(dates.map(getRates));
+    this.tempResultRecords = this.resultRecords;
+    this.resultRecords = this.resultRecords.map((record, index) => ({
+      ...record,
+      [COLUMN.AMOUNT]: rates[index][this.currencies.toCurrency],
+    }));
+  };
+
+  public resetRates = () => {
+    this.resultRecords = this.tempResultRecords;
+    this.tempResultRecords = [];
+  };
+
+  public saveRates = () => {
+    this.tempResultRecords = [];
+  };
+
+  get CSV() {
+    const addQuotes = (value: string) => `"${value}"`;
+
+    const getStringRow = (row: PreviewRecord) =>
+      Object.values(row).map(addQuotes).join(',');
+
+    const headersRow = this.headers.map(addQuotes).join(',');
+    const recordRows = this.resultRecords.map(getStringRow);
+
+    const file = headersRow + '\n' + recordRows.join('\n');
+
+    return { file, name: this.name };
+  }
 }

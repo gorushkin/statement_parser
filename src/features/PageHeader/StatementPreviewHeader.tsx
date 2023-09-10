@@ -1,42 +1,40 @@
 import { Box, Button, Heading } from '@chakra-ui/react';
-import { FC } from 'react';
+import { observer } from 'mobx-react';
+import { preview } from 'src/entities/preview';
+import { ExportButton } from 'src/shared/ExportButton';
 
-interface StatementPreviewHeaderProps {
-  name: string;
-  onReset: () => void;
-  onSave: () => void;
-}
+const PageHeader = observer(() => {
+  const {
+    CSV: { file },
+    name,
+    resetPreview,
+    saveStatement,
+  } = preview;
 
-const PageHeader: FC<StatementPreviewHeaderProps> = ({
-  name,
-  onReset,
-  onSave,
-}) => (
-  <Box alignItems={'center'} display={'flex'}>
-    <Heading
-      as="h1"
-      flexGrow={1}
-      overflow={'hidden'}
-      textAlign="center"
-      textOverflow={'ellipsis'}
-      title={name}
-      whiteSpace={'nowrap'}
-    >
-      {name}
-    </Heading>
-    <Box flexShrink={0}>
-      <Button mr={'1rem'} onClick={onReset}>
-        Reset
-      </Button>
-      <Button
-        backgroundColor={'green.400'}
-        onClick={onSave}
-        variant={'outline'}
+  return (
+    <Box alignItems={'center'} display={'flex'}>
+      <Heading
+        as="h1"
+        flexGrow={1}
+        overflow={'hidden'}
+        textAlign="center"
+        textOverflow={'ellipsis'}
+        title={name}
+        whiteSpace={'nowrap'}
       >
-        Save
-      </Button>
+        {name}
+      </Heading>
+      <Box display={'flex'} flexShrink={0} gap={'0.5rem'}>
+        <Button colorScheme="orange" onClick={resetPreview}>
+          Reset
+        </Button>
+        <Button colorScheme="green" onClick={saveStatement}>
+          Save
+        </Button>
+        <ExportButton file={file} name={name} />
+      </Box>
     </Box>
-  </Box>
-);
+  );
+});
 
 export { PageHeader };

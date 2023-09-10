@@ -1,9 +1,9 @@
 import { Td, Tr } from '@chakra-ui/react';
 import { FC } from 'react';
-import { Column, InputRecord } from 'src/entities/preview';
+import { Column, StatementRecord } from 'src/entities/preview';
 interface PreviewRowProps {
   columns: Column[];
-  row: InputRecord;
+  row: StatementRecord;
 }
 
 const PreviewRow: FC<PreviewRowProps> = ({ columns, row }) => (

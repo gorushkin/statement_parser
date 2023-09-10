@@ -1,1 +1,1 @@
-export { PreviewTable } from './PreviewTable.tsx';
+export { PreviewStatement } from './PreviewStatement.tsx';

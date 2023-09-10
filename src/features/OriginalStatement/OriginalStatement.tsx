@@ -3,8 +3,8 @@ import { observer } from 'mobx-react';
 import { preview } from 'src/entities/preview';
 import { ITable } from 'src/shared/ui/Table';
 
-const InputStatement = observer(() => {
-  const { headers, inputRecords } = preview;
+const OriginalStatement = observer(() => {
+  const { headers, originalRecords } = preview;
 
   return (
     <Box>
@@ -20,7 +20,7 @@ const InputStatement = observer(() => {
           </Tr>
         </Thead>
         <Tbody>
-          {inputRecords.map((row, rowIndex) => (
+          {originalRecords.map((row, rowIndex) => (
             <Tr key={rowIndex}>
               {Object.values(row).map((cell, cellIndex) => (
                 <Td key={cellIndex}>{cell}</Td>
@@ -33,4 +33,4 @@ const InputStatement = observer(() => {
   );
 });
 
-export { InputStatement };
+export { OriginalStatement };

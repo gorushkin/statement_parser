@@ -1,32 +1,27 @@
 import { Thead, Tr } from '@chakra-ui/react';
-import { FC } from 'react';
-import { Column } from 'src/entities/preview/';
+import { observer } from 'mobx-react';
 
+import { preview } from '../..';
 import { PreviewHeaderCell } from '../PreviewHeaderCell';
 
-interface PreviewHeaderProps {
-  columns: Column[];
-  headers: string[];
-  onChange: (name: string, value: string) => void;
-}
+const PreviewHeader = observer(() => {
+  const { headers, updatePreview, visibleColumns } = preview;
 
-const PreviewHeader: FC<PreviewHeaderProps> = ({
-  columns,
-  headers,
-  onChange,
-}) => (
-  <Thead>
-    <Tr>
-      {columns.map(({ name, visible }) => (
-        <PreviewHeaderCell
-          headers={headers}
-          key={name}
-          name={name}
-          onChange={onChange}
-          visible={visible}
-        />
-      ))}
-    </Tr>
-  </Thead>
-);
+  return (
+    <Thead>
+      <Tr>
+        {visibleColumns.map(({ name, visible }) => (
+          <PreviewHeaderCell
+            headers={headers}
+            key={name}
+            name={name}
+            onChange={updatePreview}
+            visible={visible}
+          />
+        ))}
+      </Tr>
+    </Thead>
+  );
+});
+
 export { PreviewHeader };
