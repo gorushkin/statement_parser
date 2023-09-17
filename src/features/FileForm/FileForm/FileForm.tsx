@@ -32,7 +32,7 @@ const FileForm: FC = observer(() => {
           return handleFileConvert(reader.result, name);
         });
         // TODO: add encoding selector
-        reader.readAsText(file, 'CP1251');
+        return reader.readAsText(file, 'CP1251');
       }
 
       if (
